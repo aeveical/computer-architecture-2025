@@ -48,8 +48,7 @@ module controller (
             end
         end
     end
-
-    // Transmission control
+    
     logic [2:0] transmit_state = READ_CH_VALS;
     logic [5:0] pixel_counter = 6'd0;
     logic [4:0] frame_counter = 5'd0;
@@ -66,14 +65,13 @@ module controller (
     always_ff @(posedge clk) begin
         case (current_state)
             DELAY: begin
-                // Adding one cycle delay for memory read
+                // cycle delay
                 current_state <= PREPARE_MATRIX;
             end
             
             PREPARE_MATRIX: begin
                 // create a model 8x8 matrix that keeps track of which lights are on or off (color independent)
                 // so that we can determine the next frame of the game
-
 
                 // don't care about color, only if cell is on or off -> if ANY cell values
                 // are greater than 0, cell is on/alive
@@ -283,5 +281,6 @@ module controller (
     assign pixel_value = current_matrix[current_pixel_row][current_pixel_col];
     assign load_sreg = (transmit_state == LOAD_SREG);
     assign transmit_pixel = (transmit_state == TRANSMIT_PIXEL);
+
 
 endmodule
